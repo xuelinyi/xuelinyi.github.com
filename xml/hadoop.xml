@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<data id="1">	
+		<title>深入hadoop</title>
+		<desc>深入理解计算机深入理解计算机深入理解计算机深入理解计算机深入理解计算机深入理解计算机深入理解计算机1werrrrrrrrrr1</desc>
+		<content>深入理解计算机深入理解计算机深入理解计算机深入理解计算机深入理解计算机深入理解计算机深入理解计算机1werrrrrrrrrr1content</content>
+		<url>./hadoop/01.html</url>
+	</data>
+	<data id="2">	
+		<title>深入2深入hadoop</title>
+		<desc>2深入理解计算机深入理解计算机深入理解计算机深入理解计算机深入理解计算机深入理解计算机深入理解计算机1werrrrrrrrrr1</desc>
+		<content>2深入理解计算机深入理解计算机深入理解计算机深入理解计算机深入理解计算机深入理解计算机深入理解计算机1werrrrrrrrrr1content</content>
+		<url>./hadoop/01.html</url>
+	</data>
+</root>
