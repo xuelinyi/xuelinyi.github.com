@@ -1,93 +1,30 @@
-function loadXmlFile(xmlFile)//xmlFile ÊÇxmlÎÄ¼şµÄµØÖ·
-{   
-    var xmlDom = null;
-    if (window.ActiveXObject)//IEä¯ÀÀÆ÷ÖĞ¶ÁÈ¡xmlÎÄ¼ş
-    {
-        xmlDom = new ActiveXObject("Microsoft.XMLDOM");
-        xmlDom.async="false";
-        xmlDom.load(xmlFile);
-    }
-    else if(document.implementation && document.implementation.createDocument)
-    {
-        //Firefox£¬Chrome ä¯ÀÀÆ÷ÖĞ¶ÁÈ¡xmlÎÄ¼ş ,Chrome ĞèÒª¿ª·şÎñÆ÷²ÅÄÜ·ÃÎÊ
-        var xmlhttp = new window.XMLHttpRequest();
-        xmlhttp.open("GET", xmlFile, false);
-        xmlhttp.send(null);
-        xmlDom = xmlhttp.responseXML;
-    }
-    else
-    {
-        xmlDom = null;
-    }
-    return xmlDom;
-};
- 
-//ºÃÁË¶ÁÈ¡³öÀ´ÁËxml ÎÒÃÇ¾ÍÒª»ñÈ¡µÄËûµÄÊı¾İÁË
-function gerthinkingInJavaDatas(str)
-{
-    //Éú³É¹Ø¼ü´ÊÁ´½Ó
-    var xdoc =loadXmlFile(str)
-    //var list=xdoc.selectNodes("//keys")//Ö»ÄÜÔÚIeä¯ÀÀÆ÷ÖĞ»ñÈ¡
-    var list=xdoc.getElementsByTagName("data");//¶ÁÈ¡ËùÓĞ½ÚµãÖµ
-    var table = document.createElement('table');
-		table.border = 2;
-		table.className = 'colors';
-		var thead = table.createTHead();
-		var tr = thead.insertRow(0);
-		var td1 = tr.insertCell(tr.cells.length);
-		td1.innerHTML = "title";
-		td1.style.width = "49%";
-		var td2 = tr.insertCell(tr.cells.length);
-		td2.innerHTML = "desc";
-		td2.style.width = "49%"
-		var tbody = document.createElement('tbody');
-		table.appendChild(tbody); 
-		
-    for (var i = 0; i < list.length; i++)
-    {
-         var trx = tbody.insertRow(tbody.rows.length);
-         var tdx1 = trx.insertCell(trx.cells.length);
-         var tdx2 = trx.insertCell(trx.cells.length);
-		 var url = list[i].getElementsByTagName("url")[0].childNodes[0].nodeValue;
-		 var id = list[i].getAttribute("id");
-         tdx1.innerHTML = "<a href='"+url+"?id="+id+"' target='_Blank'>"+list[i].getElementsByTagName("title")[0].childNodes[0].nodeValue+"</a>";
-         tdx2.innerHTML = list[i].getElementsByTagName("desc")[0].childNodes[0].nodeValue;
-    }
-    document.getElementsByTagName('body')[0].appendChild(table);
-};
 
+function uuid() {
+	var s = [];
+	var hexDigits = "0123456789abcdef";
+	for (var i = 0; i < 36; i++) {
+		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+	}
+	s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+	s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+	s[8] = s[13] = s[18] = s[23] = "1";
 
-
-//ºÃÁË¶ÁÈ¡³öÀ´ÁËxml ÎÒÃÇ¾ÍÒª»ñÈ¡µÄËûµÄÊı¾İÁË
-function getOneDatas(str,urlId)
-{
-    //Éú³É¹Ø¼ü´ÊÁ´½Ó
-    var xdoc =loadXmlFile(str)
-    //var list=xdoc.selectNodes("//keys")//Ö»ÄÜÔÚIeä¯ÀÀÆ÷ÖĞ»ñÈ¡
-    var list=xdoc.getElementsByTagName("data");//¶ÁÈ¡ËùÓĞ½ÚµãÖµ
-    
-    for (var i = 0; i < list.length; i++)
-    {
-    	 var id = list[i].getAttribute("id");
-		 if(id == urlId){
-			var title = list[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
-			var desc = list[i].getElementsByTagName("desc")[0].childNodes[0].nodeValue;
-			var content = list[i].getElementsByTagName("content")[0].childNodes[0].nodeValue;
-			document.getElementById("title").value = title;
-			document.getElementById("desc").value = desc;
-			document.getElementById("content").value = content;
-		 }
-    }
-    document.getElementsByTagName('body')[0].appendChild(table);
-};
-
-
-function GetQueryString(name)
-{
-     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-     var r = window.location.search.substr(1).match(reg);
-     if(r!=null)return  unescape(r[2]); return null;
+	var uuid = s.join("");
+	return uuid;
+}
+function getCurrentDb() {
+	//æ‰“å¼€æ•°æ®åº“ï¼Œæˆ–è€…ç›´æ¥è¿æ¥æ•°æ®åº“å‚æ•°ï¼šæ•°æ®åº“åç§°ï¼Œç‰ˆæœ¬ï¼Œæ¦‚è¿°ï¼Œå¤§å°
+	//å¦‚æœæ•°æ®åº“ä¸å­˜åœ¨é‚£ä¹ˆåˆ›å»ºä¹‹
+	var db = openDatabase("myDb", "1.0", "it's to save book data!",
+			102400 * 102400);
+	;
+	return db;
 }
 
-
-
+function GetQueryString(name) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null)
+		return unescape(r[2]);
+	return null;
+}
