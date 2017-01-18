@@ -62,16 +62,122 @@ The use of Hadoop, HDFS, Kafka, Mapreduce, Hive, Pig, Hbase, etc.<br/>
 <a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Data arrangement</h3>
 
 <p>
+  <a href="javascript:void(0)" target="_Blank">Java from entry to master</a><br/>
 	<a href="./thinking_in_java.html" target="_Blank">Thinking in Java</a><br/>
 	<a href="./effective_java.html" target="_Blank">Effective Java</a><br/>
 	<a href="./hadoop.html" target="_Blank">Hadoop Actual Combat</a><br/>
 	<a href="./mongodb.html" target="_Blank">Mongodb</a><br/>
+  <a href="javascript:void(0)" target="_Blank">Thorough understanding of computer systems</a><br/>
+  <a href="javascript:void(0)" target="_Blank">Java network programming</a><br/>
+  <a href="javascript:void(0)" target="_Blank">Java concurrent programming</a><br/>
+  <a href="javascript:void(0)" target="_Blank">Large web site technology architecture</a><br/>
+  <hr>
+      <span style="font-size:20px;">Reaction to a book or an article</span>
+      <!-- 书籍的阅读不仅让我知识更加丰富，也让我变得更加从容自信，解决问题不在手忙脚乱而是变得游刃有余。愿意并且喜欢分享知识从而体检其中的快乐。也让我从一个没有任何编程经验刚走出校门学生学会并坚持4年的软件工程师。也让我有了物质生活水平的提供。Java从入门到精通让我了解了Java这门语言，这本书讲述比较基础，涉及较多包括java基础（数组、字符串、流程控制），技术（OOP，异常，IO，Swing，线程，网络），但是讲述都比较粗浅，没有什么实质性的知识。经过老师的推荐学习JAVA编程思想，这本书讲述的也很杂，但完全可以应对中级左右的工程师。这本书我大约看了4遍左右有些知识还是不太理解。又看了一下Effective Java，这本书按照知识点进行深入讲解，纠正编程和印象中的一些错误。起到了一个提升的作用，因为在声学所上班，跟网络和多线程是分不开的，所以就顺应工作阅读了这方面的书籍。以前的那些书籍也会讲解这些知识都是一掠而过，没有系统全面的分析。Hadoop也是在项目中需要，遇到问题解决网上的解决办法较少，所以学习其。
+      .-->
+      <p>
+      Reading books not only let me more knowledge, also let me become more confident, solve the problem of not in a rush but more easily. Willing and willing to share knowledge so as to be happy. Let me also from one without any programming experience just out of college students to learn and adhere to the 4 years of software engineer. Also let me have the material living standard. Java from entry to the master let me understand the Java language, this book tells the basis of comparison, more involved including Java Foundation (arrays, strings, process control), technology (OOP, IO, Swing, abnormal, thread, network), but the story are relatively shallow, there is no substantive knowledge of what. After the teacher recommended learning JAVA programming ideas, this book also is very complex, but it can deal with the intermediate or engineer. I have read this book about 4 times or so I still don't understand it. And take a look at the Effective Java, this book according to knowledge in-depth explanations, some programming error correction and the impression of the. Play a role in upgrading, because the work in acoustics, with network and multi thread are inseparable, so as to adapt the work reading this book. The previous books will explain that knowledge is passing, no comprehensive analysis of the system. Hadoop is also needed in the project, the solution to the problem is less online solutions, so learn it.
+    </p>
+  <hr>
 </p>
 <h3>
 <a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Summary of problems</h3>
 
 <p>
+    <div style="overflow-x: hidden; overflow-y: auto; height: 400px;">
+      1, Long.parseLong(accountId) 不要在service实现内部出现，直接在controller里面声明为Long型的参数<br/>
+      2，if(accountId != null&&!accountId.equals("")){ 改为 if((null!=accountId) && (!"".equals(accountId))){<br/>
+      3，if((null != account)&&(!"".equals(account))){<br/>
+      改为if((null != account)&&(account.id>0))){<br/>
+      4, public List<PermissionDTO> findPermissionListList(){<br/>
+      5,Query query = sessionFactory.getCurrentSession().createQuery("FROM Permission");<br/>
+      不要使用openSession<br/>
+      6，判断不准确<br/>
+      if(account.getLoginNumber() == 0){<br/>
+      this.setLocked("正常");<br/>
+      }else{<br/><br/>
+      this.setLocked("锁定");<br/>
+      }<br/>
+      7，SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");<br/>
+      统一修改为yyyy/MM/dd HH:MM:ss<br/>
+      8,创建时间的逻辑属于类<br/>
+      SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");<br/>
+      account.setCreateTime(df.format(new Date()));<br/>
+      9，<br/>
+      Account oldAccount = (Account) sessionFactory.getCurrentSession().get(Account.class, account.getId());<br/>
+      oldAccount.getPermissionList().clear();<br/>
+      //sessionFactory.getCurrentSession().saveOrUpdate(oldAccount);<br/>
+      if((null!=oldAccount)&&(!"".equals(oldAccount))){<br/>
+      sessionFactory.getCurrentSession().clear();<br/>
+      sessionFactory.getCurrentSession().update(account);<br/>
+      }<br/>
+      修改为：<br/>
+      Account oldAccount = (Account) sessionFactory.getCurrentSession().get(Account.class, account.getId());<br/>
+      oldAccount.getPermissionList().clear();<br/>
+      在Account类中增加一个update函数，在函数中更新oldAccount中需要修改的参数，除了Id<br/>
+      for(account 入参里面的permission)<br/>
+      用Id把get出来，<br/>
+      oldAccount.getPermissionList().add(xx)<br/>
+      sessionFactory.getCurrentSession().update(oldAccount);<br/>
+       
+      10,public boolean lockAccount(long accountId,String buttonName){<br/>
+      不把中文当做关键状态参数参数<br/>
+       
+      11，whereStr.append("where 1=1 ");<br/>
+      数据库关键词都大写<br/>
+       
+      12，whereStr.append("and a.name like :accountName ");<br/>
+      配套使用<br/>
+       
+      13，adminLogStr.append(" and str_to_date(TTIME, '%Y/%m/%d %H:%i:%s') >='"+adminLogDTO.getStartTime() +"' and str_to_date(TTIME, '%Y/%m/%d %H:%i:%s') <='"+adminLogDTO.<br/>getEndTime()+"'");<br/>
+       
+      14，List<AdminLog> adminLogList = null;<br/>
+      改为List<AdminLog> adminLogList = new ArrayList<AdminLog>()<br/>
+      if(AccountServiceImpl.isNotEmpty(singleUserId)){ ，不能直接使用AccountServiceImpl，对参数的判断就放在Controller里面<br/>
+      15，SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:MM:ss"); 都放在函数里面<br/>
+      16，写个构造函数<br/>
+      accountDTO.setId(list.get(0).getId());<br/>
+      accountDTO.setName(list.get(0).getName());<br/>
+      accountDTO.setPassword(list.get(0).getPassword());<br/>
+      accountDTO.setPhoneNumber(list.get(0).getPhoneNumber());<br/>
+      accountDTO.setEmail(list.get(0).getEmail());<br/>
+      accountDTO.setDesc(list.get(0).getDesc());<br/>
+      //userJson.accumulate(list.get(0).gets());<br/>
+      String permissionIds = "";<br/>
+      for (AccountPermissionRelation obj : list.get(0).getAccountPermissionRelations()) {<br/>
+      //userDTO.setRrole(obj.getRrole());<br/>
+      permissionIds += obj.getPermission().getId()+",";<br/>
+      }<br/>
+      accountDTO.setPermission(permissionIds);<br/><br/>
+      17，多对多的中间表，如果除了外键外没有其他属性就不要拆成两个一对多<br/>
+      18，没有特殊情况，不允许使用IN<br/>
+      19，实体类就用基础类型，只允许使用long、String，时间统一使用 yyyy/MM/dd HHs:mm<br/>
+      20，实体类对的集合都用List，初始化成ArrayList<br/>
+      21,impl里面不允许声明@Service ，@Autowired<br/>
+      22,数据库创建需要增加 DEFAULT CHARACTER SET UTF8;<br/>
+      23,不允许出现e.printStackTrace() ，都用log.error(e,e);<br/>
+      24,不允许使用"\\" ，使用File.pathSeparator<br/>
+      25,finally里面，分别关闭，并且catch  Exception<br/>
+      26,String+改为StringBuilder或StringBuffer<br/>
+      27,FileOutputStream fout = new FileOutputStream(exlPath); ，文件一定要确保关闭<br/>
+      28,下载时，不要把完整目录暴露给用户了<br/>
+      29,鼓励写TODO<br/>
+      30，升级返回值写成integer.<br/>
+      31，性能测试，单独写（解决）<br/>
+      32，接口测试,静态变量static去掉（解决）<br/>
+      33，不要在JS中操作html中的option<br/>
+      34，返回提示信息采用国际化方法，不在Java中实现；<br/>
+      35,静态文件直接下载<br/>
+      36,Excel未判断为空的情况<br/>
+      37,SimpleDateFormat不要共用<br/>
+      38,函数返回值，默认一般为失败<br/>
+      39,PageDTO中的ItemCount改为Long<br/>
+      40,SQL和HQL中的关键词、保留字都大写<br/>
+      41,SQL或HSQL尽量写成预编译，PreparedStatement<br/>
+      42,分页查询中，第一页在URL中从1开始<br/>
+      43删除都采用HSQL删除<br/>
 
+    </div>
 </p>
 
         </section>
